@@ -1,25 +1,22 @@
-import React, { useEffect } from "react";
 import axios from "axios";
 import { useLoaderData } from "react-router-dom";
 import CockTailList from "../components/CocktailList";
-const url = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
-export const loader = async () => {
-  const searchTerm = "";
-  try {
-    const response = await axios.get(`${url}${searchTerm}`);
-    return { drinks: response.data.drinks, searchTerm };
-  } catch (error) {
-    console.log(error);
-  }
+import SearchForm from "../components/SearchForm";
+const cocktailSearchUrl = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
+export const loader = async ({ request }) => {
+
+  const url = new URL(request.url);
+  const searchTerm = url.searchParams.get("search") || "";
+  const response = await axios.get(`${cocktailSearchUrl}${searchTerm}`);
+  return { drinks: response.data.drinks, searchTerm };
 };
-
-
 
 function Landing() {
   const { drinks, searchTerm } = useLoaderData();
 
   return (
     <>
+      <SearchForm searchTerm={searchTerm}/>
       <CockTailList drinks={drinks} />
     </>
   );
