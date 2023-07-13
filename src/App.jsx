@@ -1,20 +1,18 @@
-import {
-  HomeLayout,
-  About,
-  Landing,
-  Error,
-  Newsletter,
-  Cocktail,
-  SinglePageError,
-} from "./pages";
-
+import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { loader as landingLoader } from "./pages/Landing";
-import { loader as singleCocktailLoader } from "./pages/Cocktail";
-import { action as newsletterAction } from "./pages/Newsletter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  About,
+  Cocktail,
+  Error,
+  HomeLayout,
+  Landing,
+  Newsletter,
+} from "./pages";
+import { loader } from "./pages/Landing";
+import SinglePageError from "./pages/SinglePageError";
+import { singleCocktailLoader } from "./pages/Cocktail";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +20,7 @@ const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5,
     }
   }
-})
+});
 
 const router = createBrowserRouter([
   {
@@ -33,42 +31,38 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
+        loader: loader(queryClient),
         errorElement: <SinglePageError />,
-        loader: landingLoader(queryClient),
       },
       {
-        path: "cocktail/:id",
-        errorElement: <SinglePageError />,
+        path: "/cocktail/:id",
         element: <Cocktail />,
         loader: singleCocktailLoader(queryClient),
+        errorElement: <SinglePageError />,
+      },
+      {
+        path: "cocktail",
+        element: <Cocktail />,
       },
       {
         path: "newsletter",
         element: <Newsletter />,
-        action: newsletterAction,
       },
+
       {
         path: "about",
         element: <About />,
-        children: [
-          {
-            path: "company",
-            element: <h2>our company</h2>,
-          },
-          {
-            path: "person",
-            element: <h2>john doe</h2>,
-          },
-        ],
       },
     ],
   },
 ]);
 
 const App = () => {
-  return <QueryClientProvider client={queryClient}>
-    <RouterProvider router={router} />
-    <ReactQueryDevtools initialIsOpen={false} />
-  </QueryClientProvider>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
 };
 export default App;

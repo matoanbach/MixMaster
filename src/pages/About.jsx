@@ -1,9 +1,10 @@
+import { Link, Outlet } from "react-router-dom";
 import Wrapper from "../assets/wrappers/AboutPage";
 
 function About() {
   return (
     <Wrapper>
-      <h3>About Us</h3>
+      <h3>about us</h3>
       <p>
         Introducing "MixMaster," the ultimate party sidekick app that fetches
         cocktails from the hilarious Cocktails DB API. With a flick of your

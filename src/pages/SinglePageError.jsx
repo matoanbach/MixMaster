@@ -1,12 +1,12 @@
-import React from 'react'
-import { useRouteError } from 'react-router-dom'
+import { useRouteError } from "react-router-dom";
+
 
 function SinglePageError() {
-    const error = useRouteError()
+    const error = useRouteError();
     console.log(error)
-  return (
-    <div>{error.message}</div>
-  )
+  return <h2>
+    {error.message}
+  </h2>;
 }
 
-export default SinglePageError
+export default SinglePageError;
